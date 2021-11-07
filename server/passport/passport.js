@@ -65,7 +65,7 @@ passport.use('restaurant-local', new LocalStrategy({ usernameField: "restaurantE
                     throw err
                 }
                 if(isMatch) {
-                    return done(null, restaurant
+                    return done(null, restaurant)
                 }
                 else{
                     return done(null, false, {message: 'Password incorrect'})
