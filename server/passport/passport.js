@@ -80,7 +80,7 @@ passport.use('restaurant-local', new LocalStrategy({ usernameField: "restaurantE
 // AGENT
 
 passport.use('agent-local', new LocalStrategy({ usernameField: "agentEmail"}, (agentEmail, agentPassword, done) => {
-    Agent.findOne({ agentEmail: agentmail }).then(agent => {
+    Agent.findOne({ agentEmail: agentEmail }).then(agent => {
         if(!agent){
             return res.json({message: 'Agent does not exist'})
         }
