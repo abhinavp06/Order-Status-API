@@ -36,7 +36,10 @@ const agentSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
-        role: 1
+        role:{
+            type: Number,
+            value: 1
+        }
     },
     { timestamps: true }
 )

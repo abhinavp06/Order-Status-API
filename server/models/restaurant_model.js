@@ -7,7 +7,7 @@ const restaurantSchema = new mongoose.Schema(
             type: String,
             required: true,
             min: 1,
-            unique: false
+            unique: true
         },
         restaurantEmail:{
             type: String,
@@ -44,7 +44,10 @@ const restaurantSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Food'
         }],
-        role: 2
+        role:{
+            type: Number,
+            value: 2
+        }
     },
     { timestamps: true }
 )

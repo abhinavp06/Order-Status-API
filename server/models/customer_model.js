@@ -23,6 +23,7 @@ const customerSchema = new mongoose.Schema(
         },
         customerPhoneNumber:{
             type: String,
+            min:10,
             max: 10,
             required: true,
             unique: true
@@ -38,7 +39,10 @@ const customerSchema = new mongoose.Schema(
                 ref: 'Restaurant'
             }
         }],
-        role: 0
+        role:{
+            type: Number,
+            value: 0
+        }
 
     },
     { timestamps: true }
