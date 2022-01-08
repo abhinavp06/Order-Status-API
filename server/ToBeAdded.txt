@@ -10,6 +10,3 @@ Customer:
     - Bookmark a restaurant
     - Repeat order feature
     - Multiple addresses
-
-Authentication:
-    - Multiple users logged in at the same time
