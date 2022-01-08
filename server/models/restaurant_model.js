@@ -32,15 +32,21 @@ const restaurantSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order'
         }],
+        // the order in progress is an array created where new orders are first kep. When the orders have been prepared and delivered, the order moves to the restaurantOrders array.
+        restaurantOrdersInProgress:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
+        }],
         restaurantRating:{
             type: Number,
             default: 0
         },
-        restaurantRatingsReceived: {
-            type: Number,
-            default: 0
-        },
-        restaurantFood:[{
+        // storing the users who rate the restaurant. This array is not accessible by anyone. Incase, the user wants to change their rating, we find it in this array and change the rating. Then the total is again calculated.
+        restaurantRatingDetails:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'RestaurantRating'
+        }],
+        restaurantMenu:[{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Food'
         }],

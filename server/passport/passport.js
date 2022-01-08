@@ -5,9 +5,19 @@ const Customer = require("../models/customer_model")
 const Restaurant = require("../models/restaurant_model")
 const Agent= require("../models/deliveryAgent_model")
 
+function isCustomer(user){
+    return (user.role == 0) ? true : false
+}
+
+function isRestaurant(user){
+    console.log("We are in the isRestaurant function")
+    return (user.role == 2) ? true : false
+}
+
 passport.serializeUser ((user, done) => {
     done(null, user.id)
 })
+
 
 passport.deserializeUser ((id, done) => {
     if(isCustomer(user)){

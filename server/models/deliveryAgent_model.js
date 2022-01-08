@@ -28,6 +28,11 @@ const agentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order'
         }],
+        // store all the undelivered orders here. Move it to the agentOrders array once they have been marked as delivered.
+        agentOrdersInProgress:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
+        }],
         agentRating:{
             type: Number,
             default: 0
@@ -36,6 +41,10 @@ const agentSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
+        agentRatingDetails:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'AgentRating'
+        }],
         role:{
             type: Number,
             value: 1

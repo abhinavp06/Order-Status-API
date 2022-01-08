@@ -6,12 +6,17 @@ const orderSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Restaurant'
         },
+        // As of now, storing same items seprately in the order. Not grouping them together and adding a quantity field.
+        // orderItems:[{
+        //     orderFood:{
+        //         type: mongoose.Schema.Types.ObjectId,
+        //         ref: 'Food'
+        //     },
+        //     quantity: Number
+        // }],
         orderItems:[{
-            orderFood:{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Food'
-            },
-            quantity: Number
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Food'
         }],
         orderAmount: Number,
         orderStatus: String,

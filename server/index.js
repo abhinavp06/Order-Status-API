@@ -7,7 +7,7 @@ const session = require('express-session')
 const passport = require('./passport/passport')
 
 // IMPORTING ROUTES
-const authRoutes = require("./routes/auth_routes")
+const allRoutes = require("./routes/all_routes")
 
 mongoose.connect(process.env.MONGODB_URL, 
     {
@@ -33,7 +33,7 @@ app.get("/", (req,res) => {
     res.json("🎂")
 })
 
-app.use("/", authRoutes)
+app.use("/", allRoutes)
 
 const port = process.env.PORT || 8000
 

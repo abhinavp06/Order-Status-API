@@ -32,18 +32,18 @@ const customerSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order'
         }],
-        customerRatings:[{
-            ratingNumber: Number,
-            ratingRestaurant:{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Restaurant'
-            }
+        customersRestaurantRatings:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'RestaurantRating'
+        }],
+        customersAgentRatings:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'AgentRating'
         }],
         role:{
             type: Number,
             value: 0
         }
-
     },
     { timestamps: true }
 )
