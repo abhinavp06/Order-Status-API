@@ -32,6 +32,10 @@ const customerSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order'
         }],
+        customerOrdersInProgress:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
+        }],
         customersRestaurantRatings:[{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'RestaurantRating'

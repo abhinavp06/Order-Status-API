@@ -27,6 +27,10 @@ const orderSchema = new mongoose.Schema(
         orderCustomer:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Customer'
+        },
+        isDelivered:{
+            type: Number,
+            default: 0
         }
     },    
     { timestamps: true }

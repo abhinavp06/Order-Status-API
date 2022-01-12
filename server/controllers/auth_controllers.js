@@ -4,11 +4,10 @@ const Agent = require("../models/deliveryAgent_model")
 const passport = require("passport")
 
 // CUSTOMER
-
 exports.signUpCustomer = async(req,res) => {
     
-    const {customerName, customerEmail, customerPassword, customerPhoneNumber} = req.body
-    const newCustomer = new Customer({customerName, customerEmail, customerPassword, customerPhoneNumber})
+    const {customerName, customerEmail, customerPassword, customerPhoneNumber, customerAddress} = req.body
+    const newCustomer = new Customer({customerName, customerEmail, customerPassword, customerPhoneNumber, customerAddress})
     
     try{
         await newCustomer.save()
@@ -36,16 +35,11 @@ exports.signInCustomer = async(req,res,next) => {
     })(req,res,next)
 }
 
-exports.isCustomer = async(req,res,next) => {
-    return (req.user.role == 0) ? true : false
-}
-
 // RESTAURANT
-
 exports.signUpRestaurant = async(req,res) => {
 
-    const {restaurantName, restaurantEmail, restaurantPassword, restaurantPhoneNumber} = req.body
-    const newRestaurant = new Restaurant({restaurantName, restaurantEmail, restaurantPassword, restaurantPhoneNumber})
+    const {restaurantName, restaurantEmail, restaurantPassword, restaurantPhoneNumber, restaurantAddress} = req.body
+    const newRestaurant = new Restaurant({restaurantName, restaurantEmail, restaurantPassword, restaurantPhoneNumber, restaurantAddress})
     
     try{
         await newRestaurant.save()
@@ -74,13 +68,7 @@ exports.signInRestaurant = async(req,res,next) => {
     })(req,res,next)
 }
 
-exports.isRestaurant = async(req,res, next) => {
-    return (req.user.role == 2) ? true : false  
-}
-
-
 // AGENT
-
 exports.signUpAgent = async(req,res) => {
 
     const {agentName, agentEmail, agentPassword, agentPhoneNumber} = req.body
@@ -113,11 +101,13 @@ exports.signInAgent = async (req,res,next) => {
     })(req,res,next)
 }
 
-exports.isAgent = async(req,res,next) => {
-    return (req.user.role == 1) ? true : false 
+// SIGN OUT
+exports.signOut = async(req,res) => {
+    req.logout()
+    return res.status(200).json({ success: 'Logged out successfully'})
 }
 
-// COMMON
+// CHECK WHO IS LOGGED IN
 exports.whoIsLoggedIn = async(req,res) => {
     
     switch(req.user.role){
@@ -130,19 +120,43 @@ exports.whoIsLoggedIn = async(req,res) => {
     }
 }
 
-exports.isAuthenticated = async(req,res,next) =>{
-    
-    const {id} =req.params; 
-    if(req.user._id == id){
-        next();
-    }else{
-        res.json(`You are not allowed to edit other's profiles`)
+
+// MIDDLEWARES
+exports.isCustomer = async(req,res,next) => {
+    if(req.user.role == 0)
+        next()
+    else
+        return res.json(`You are not a customer.`)
+}
+
+exports.isRestaurant = async(req,res, next) => {
+    if(req.user.role == 2)
+        next()
+    else
+        return res.json(`You are not a restaurant.`)
+}
+
+exports.isAgent = async(req,res,next) => {
+    if(req.user.role == 1)
+        next()
+    else
+        return res.json(`You are not a agent.`)
+}
+
+exports.isMenuCreator = (req,res,next) => { // while editing the menu, we need to make sure the restaurant logged in is the restaurant which created the menu
+    const {restaurantId} = req.params
+    if(req.user._id == restaurantId)
+        next()
+    else{
+        return res.json(`You cannot edit other restaurant's menu`)
     }
 }
 
-exports.signOut = async(req,res) => {
-    req.logout()
-    return res.status(200).json({ success: 'Logged out successfully'})
+exports.isOrderCreator = (req,res,next) => { // too edit order details we need to make sure the logged in user is the order creator
+    const {customerId} = req.params
+    if(req.user._id == customertId)
+        next()
+    else{
+        return res.json(`You don't have access to others' orders`)
+    }
 }
-
-
