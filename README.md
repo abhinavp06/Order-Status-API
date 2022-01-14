@@ -18,15 +18,15 @@ This is an API which mimics basic features of popular food delivery apps like Sw
 #### 3. CRUD operations on posts,comments,replies.
 
 ## TO BE ADDED:
-Restaurant:
-    - Discounts
-    - Menu (group dishes in one category)
-    - Reviews
-    - Sold out/ Not available
+###Restaurant:
+####    - Discounts
+####    - Menu (group dishes in one category)
+####    - Reviews
+####    - Sold out/ Not available
     
-Customer:
-    - Referral codes
-    - Profile picture
-    - Bookmark a restaurant
-    - Repeat order feature
-    - Multiple addresses
+###Customer:
+####    - Referral codes
+####    - Profile picture
+####    - Bookmark a restaurant
+####    - Repeat order feature
+####    - Multiple addresses
