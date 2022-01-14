@@ -10,7 +10,6 @@ This is an API which mimics basic features of popular food delivery apps like Sw
 ####      2. Install the node modules by the following command: ```npm install``` in the server directory.
 ####      3. Add a .env file in the server directory. An example .env file is present in this repository.
 ####      4. To run in development mode, type the following: ```npm run dev```
-####      5. To send requests to the API, a Postman JSON file has been added in the repository. Load the JSON file in Postman and send requests.
 
 ## FEATURES:
 #### 1. Authentication.
