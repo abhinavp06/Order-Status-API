@@ -4,6 +4,21 @@ const RestaurantRating = require("../models/restaurantRating_model")
 const Restaurant = require("../models/restaurant_model")
 const Agent = require("../models/deliveryAgent_model")
 const AgentRating = require("../models/agentRating_model")
+const Food = require("../models/food_model")
+
+// GLOBAL VARIABLES
+var dishes = [] // store the IDs of dishes of an order
+var totalAmt = 0 // store the toal amount
+
+//setting up nodemailer - email is sent when the order has been created
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth: {
+        user:process.env.nodemailerFromEmail,
+        pass:process.env.nodemailerFromPassword
+    }
+})
 
 // PROFILE - edit
 exports.editCustomerProfile = (req,res) => {
@@ -19,11 +34,69 @@ exports.editCustomerProfile = (req,res) => {
 }
 
 // ORDERS
+//add items to an order
+exports.addItemToOrder = (req,res) => {
+    const {dishId} = req.params
+    const dish = Food.findById(dishId)
+    try{
+        dishes.push(dishId)
+        totalAmt = totalAmt + dish.foodPrice
+        return res.status(200).json(`Dish added!`)
+    }catch(err){
+        return res.json(err)
+    }
+    
+}
+//delete items from the order
+exports.deleteItemFromOrder = (req,res) => {
+    const {dishId} = req.params
+    const dish = Food.findById(dishId)
+    try{
+        dishes.remove(dishId)
+        totalAmt = totalAmt - dish.foodPrice
+        return res.status(200).json(`Dish removed!`)
+    }catch(err){
+        return res.json(err)
+    }
+}
 // create new order
 exports.createNewOrder = (req,res) => {
     const {restaurantId} = req.params
     const newOrder = new Order();
-    newOrder.orderRestaurant = Restaurant.findById(restaurantId)
+    const restaurantOrderPlaced = Restaurant.findById(restaurantId)
+    const whoIsDelivering = Agent.findOne()
+    newOrder.orderRestaurant = restaurantOrderPlaced
+    newOrder.orderStatus = "Order has been placed!"
+    newOrder.orderAgent = whoIsDelivering
+    newOrder.orderCustomer = req.user._id
+    newOrder.orderAmount = totalAmt
+    newOrder.orderItems = dishes
+    newOrder.save()
+    //Push the order in the restaurant's ordersInProgress array
+    restaurantOrderPlaced.restaurantOrdersInProgress.push(newOrder)
+    //Push the order in the agent's ordersInProgress array
+    whoIsDelivering.agentOrdersInProgress.push(newOrder)
+    //Push the order in the customer's ordersInProgress array
+    req.user.customerOrdersInProgress.push(newOrder)
+
+    // Reseting the global variables
+    totalAmt = 0
+    dishes = []
+    
+    //sending email to the customer
+    const emailMessage = {
+        from:process.env.nodemailerFromEmail,
+        to: req.user.customerEmail,
+        subject:'New Order at' + restaurantOrderPlaced.restaurantName,
+        text:'Thank you for ordering at' + restaurantOrderPlaced.restaurantName + '. Your Order ID is: ' + newOrder._id + '. Your total amount is: ' + newOrder.orderAmount
+    }
+    transporter.sendMail(emailMessage, function(err,info){
+        if(err){
+            console.log(err)
+            return res.status(err)
+        }
+        return res.status(200).json(`Your order has been created! Check your email for details.`)
+    })
     
 }
 // see previous orders
