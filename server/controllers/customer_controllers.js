@@ -20,6 +20,17 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+//basic getbyId function - only the customer can use this function
+exports.getCustomerById = (req,res) => {
+    const {customerId} = req.params
+    Customer.find({id: customerId}, {customerPassword: 0}, function(err,cust){
+        if(err)
+            return res.json(err)
+        else
+            return res.status(200).json(cust)
+    })
+}
+
 // PROFILE - edit
 exports.editCustomerProfile = (req,res) => {
     Customer.findByIdAndUpdate({_id: req.user._id},
@@ -52,7 +63,11 @@ exports.deleteItemFromOrder = (req,res) => {
     const {dishId} = req.params
     const dish = Food.findById(dishId)
     try{
-        dishes.remove(dishId)
+        //dishes.remove(dishId)
+        const index = dishes.indexOf(dish);
+        if (index > -1) {
+            dishes.splice(index, 1);
+        }
         totalAmt = totalAmt - dish.foodPrice
         return res.status(200).json(`Dish removed!`)
     }catch(err){
@@ -144,8 +159,10 @@ exports.RateRestaurant = (req,res) => {
         if(err)
             return res.json(err)
         else{
+            //update the restaurantRatingReceived variable
+            restaurantRatingReceived = restaurantRatingReceived + 1
             //get the restaurant's total rating, add the new rating and update the value
-            rest.restaurantRating = ((rest.restaurantRating + rating)/(restaurantRatingDetails.count() + 1))
+            rest.restaurantRating = ((rest.restaurantRating + rating)/(rest.restaurantRatingReceived))
             //add the new rating to the restaurantRatingDetails array
             rest.restaurantRatingDetails.push(newRating)
 
@@ -179,7 +196,7 @@ exports.editRestaurantRating = (req,res) => {
                 if(err)
                     return res.json(err)
                 else{
-                    rest.restaurantRating = ((res.restaurantRating - oldRatingTemp + newRatingValue)/rest.restaurantRatingDetails.count())
+                    rest.restaurantRating = ((res.restaurantRating - oldRatingTemp + newRatingValue)/rest.restaurantRatingReceived)
                     return res.status(200).json(`Restaurant rating updated!`)
                 }
             })

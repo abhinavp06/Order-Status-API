@@ -41,6 +41,10 @@ const restaurantSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
+        restaurantRatingsReceived:{
+            type: Number,
+            defailt: 0
+        },
         // storing the users who rate the restaurant. This array is not accessible by anyone. Incase, the user wants to change their rating, we find it in this array and change the rating. Then the total is again calculated.
         restaurantRatingDetails:[{
             type: mongoose.Schema.Types.ObjectId,
