@@ -1,11 +1,9 @@
 const Restaurant = require("../models/restaurant_model")
-const RestaurantRating = require("../models/restaurantRating_model")
 const Order = require("../models/order_model")
 const Dish = require("../models/food_model")
-const { restart } = require("nodemon")
 
 // PROFILE - edit
-exports.editCustomerProfile = (req,res) => {
+exports.editRestaurantProfile = (req,res) => {
     Restaurant.findByIdAndUpdate({_id: req.user._id},
         {$set: req.body},
         {new: true, useFindAndModify: false},  
@@ -85,7 +83,7 @@ exports.showRestaurantsInProgressOrders = (req,res) => {
         if(err)
             return res.json(err)
         else{
-            return res.status(200).json(user.restaurantOrdersInProgress)
+            return res.status(200).json(rest.restaurantOrdersInProgress)
         }
     })
 }
@@ -96,7 +94,7 @@ exports.showRestaurantsPreviousOrders = (req,res) => {
         if(err)
             return res.json(err)
         else{
-            return res.status(200).json(user.restaurantOrders)
+            return res.status(200).json(rest.restaurantOrders)
         }
     })
 }

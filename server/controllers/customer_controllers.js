@@ -160,7 +160,7 @@ exports.RateRestaurant = (req,res) => {
             return res.json(err)
         else{
             //update the restaurantRatingReceived variable
-            restaurantRatingReceived = restaurantRatingReceived + 1
+            rest.restaurantRatingsReceived = rest.restaurantRatingsReceived + 1
             //get the restaurant's total rating, add the new rating and update the value
             rest.restaurantRating = ((rest.restaurantRating + rating)/(rest.restaurantRatingReceived))
             //add the new rating to the restaurantRatingDetails array
@@ -196,7 +196,7 @@ exports.editRestaurantRating = (req,res) => {
                 if(err)
                     return res.json(err)
                 else{
-                    rest.restaurantRating = ((res.restaurantRating - oldRatingTemp + newRatingValue)/rest.restaurantRatingReceived)
+                    rest.restaurantRating = ((res.restaurantRating - oldRatingTemp + newRatingValue)/rest.restaurantRatingsReceived)
                     return res.status(200).json(`Restaurant rating updated!`)
                 }
             })
@@ -228,8 +228,10 @@ exports.RateAgent = (req,res) => {
         if(err)
             return res.json(err)
         else{
+            //update the agentRatingsReceived variable
+            agent.agentRatingsReceived = agent.agentRatingsReceived + 1
             //get the agent's total rating, add the new rating and update the value
-            agent.agentRating = ((agent.agentRating + rating)/(agentRatingDetails.count() + 1))
+            agent.agentRating = ((agent.agentRating + rating)/agentRatingsReceived)
             //add the new rating to the agentRatingDetails array
             agent.agentRatingDetails.push(newRating)
 
@@ -263,7 +265,7 @@ exports.editAgentRating = (req,res) => {
                 if(err)
                     return res.json(err)
                 else{
-                    ag.agentRating = ((ag.agenttRating - oldRatingTemp + newRatingValue)/ag.agentRatingDetails.count())
+                    ag.agentRating = ((ag.agenttRating - oldRatingTemp + newRatingValue)/ag.agentRatingsReceived)
                     return res.status(200).json(`Agent rating updated!`)
                 }
             })
