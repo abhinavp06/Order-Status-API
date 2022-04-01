@@ -112,13 +112,28 @@ exports.changeOrderStatusToBeingPrepared = (req,res) => {
 }
 //change status of order to out for delivery
 exports.changeOrderStatusToOutForDelivery = (req,res) => {
-    const {orderId} = req.params
-    Order.findById({id: orderId}, function(err,ord){
+    const {orderId, restaurantId} = req.params
+    
+    //move the order to restaurant's previous orders array
+    Restaurant.findById({id: restaurantId}, function(err,rest){
         if(err)
             return res.json(err)
         else{
-            ord.orderStatus(`Out for delivery`)
-            return res.json(`Order status updated!`)
+            const index = rest.restaurantOrdersInProgress.indexOf(orderId);
+            if (index > -1) {
+                rest.restaurantOrdersInProgress.splice(index, 1);
+            }
+            rest.restaurantOrders.push(orderId)
+
+            //changing the status of the order
+            Order.findById({id: orderId}, function(err,ord){
+                if(err)
+                    return res.json(err)
+                else{
+                    ord.orderStatus(`Out for delivery`)
+                    return res.json(`Order status updated!`)
+                }
+            })
         }
     })
 }
