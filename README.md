@@ -1,5 +1,5 @@
 # Order Status API
-This is an API which mimics basic features of popular food delivery apps like Swiggy, Zomato, etc.
+Sign up as a customer, restaurant or a delivery agent. Customers can place an order. The restaurant prepares the order and a delivery agent is assigned. The delivery agent will mark the order as delivered.
 
 ## Technology Used:
 ### MongoDB, Mongoose, Express, Node.js
